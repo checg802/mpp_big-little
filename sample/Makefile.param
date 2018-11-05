@@ -1,0 +1,239 @@
+# Hisilicon Hi35xx sample Makefile.param
+
+ifeq ($(PARAM_FILE), )
+     PARAM_FILE:=../../../mpp_big-little/Makefile.param
+     include $(PARAM_FILE)
+endif
+
+ifeq ($(WDR),)
+WDR :=n
+endif
+
+################# select sensor type for your sample ####################
+####imx290_mipi,/imx290_mipi_double########
+####imx117_8m,imx117_1080p,imx117_720p##########
+####imx377_8m,imx377_1080p,imx377_720p,imx377_12m##########
+####imx274_8m##########
+####imx226_8m, imx226_9m, imx226_12m##########
+####ov4689_4m_double,ov4689_4m_single##########
+####imx326_5m##########
+
+ifeq ($(SNS),)
+//SNS=imx274_8m
+SNS=imx185
+endif
+
+
+################ select gyro sensor #####################################
+######## please insmod gyro_bosch.ko or gyro_invensense.ko first ########
+######## make sure kernel CONFIG_HZ_1000=y #####################
+#GYRO_TYPE ?= GYRO_INVENSENSE
+GYRO_TYPE ?= GYRO_BOSCH
+
+SENSOR_TYPE ?= SONY_IMX274_LVDS_4K_30FPS
+#########################################################################
+
+SENSOR_LIBS := $(REL_LIB)/libisp.a
+
+ifeq ($(SNS), imx290_mipi_double)
+    SENSOR_LIBS += $(REL_LIB)/libsns_imx290.a
+	SENSOR_TYPE = SONY_IMX290_MIPI_1080P_30FPS
+	CFLAGS += -DSNS_IMX290_MIPI_DOUBLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+
+ifeq ($(SNS), imx290_mipi)
+    SENSOR_LIBS += $(REL_LIB)/libsns_imx290.a
+	SENSOR_TYPE = SONY_IMX290_MIPI_1080P_30FPS
+	CFLAGS += -DSNS_IMX290_MIPI_SINGLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+ifeq ($(SNS), ov4689_4m_single)
+    SENSOR_LIBS += $(REL_LIB)/libsns_ov4689_slave.a
+	SENSOR_TYPE = OMNIVISION_OV4689_MIPI_4M_30FPS
+	CFLAGS += -DSNS_OV4689_4M_SINGLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+
+ifeq ($(SNS), ov4689_4m_double)
+    SENSOR_LIBS += $(REL_LIB)/libsns_ov4689_slave.a
+	SENSOR_TYPE = OMNIVISION_OV4689_MIPI_4M_30FPS
+	CFLAGS += -DSNS_OV4689_4M_DOUBLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+
+ifeq ($(SNS), imx226_8m)
+    SENSOR_LIBS += $(REL_LIB)/libsns_imx226.a
+	SENSOR_TYPE = SONY_IMX226_LVDS_4K_60FPS
+	CFLAGS += -DSNS_IMX226_8M_SINGLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+ifeq ($(SNS), imx226_9m)
+    SENSOR_LIBS += $(REL_LIB)/libsns_imx226.a
+	SENSOR_TYPE = SONY_IMX226_LVDS_9M_30FPS
+	CFLAGS += -DSNS_IMX226_9M_SINGLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+ifeq ($(SNS), imx226_12m)
+    SENSOR_LIBS += $(REL_LIB)/libsns_imx226.a
+	SENSOR_TYPE = SONY_IMX226_LVDS_12M_30FPS
+	CFLAGS += -DSNS_IMX226_12M_SINGLE
+	CFLAGS += -DHI_MIPI_ENABLE
+endif
+
+ifeq ($(SNS), imx117_8m)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx117.a
+SENSOR_TYPE = SONY_IMX117_LVDS_4K_30FPS
+CFLAGS += -DSNS_IMX117_8M_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif
+
+ifeq ($(SNS), imx117_12m)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx117.a
+SENSOR_TYPE = SONY_IMX117_LVDS_12M_28FPS
+CFLAGS += -DSNS_IMX117_12M_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx117_1080p)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx117.a
+SENSOR_TYPE = SONY_IMX117_LVDS_1080P_120FPS
+CFLAGS += -DSNS_IMX117_1080P_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx117_720p)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx117.a
+SENSOR_TYPE = SONY_IMX117_LVDS_720P_240FPS
+CFLAGS += -DSNS_IMX117_720P_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx377_8M30_10BIT)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx377.a
+SENSOR_TYPE = SONY_IMX377_MIPI_8M_30FPS_10BIT
+CFLAGS += -DSNS_IMX377_8M30_10BIT_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx377_8M60_10BIT)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx377.a
+SENSOR_TYPE = SONY_IMX377_MIPI_8M_60FPS_10BIT
+CFLAGS += -DSNS_IMX377_8M60_10BIT_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx377_1080P120_12BIT)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx377.a
+SENSOR_TYPE = SONY_IMX377_MIPI_1080P_120FPS_12BIT
+CFLAGS += -DSNS_IMX377_1080P120_12BIT_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx377_720P240_10BIT)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx377.a
+SENSOR_TYPE = SONY_IMX377_MIPI_720P_240FPS_10BIT
+CFLAGS += -DSNS_IMX377_720P240_10BIT_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx377_12M30_12BIT)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx377.a
+SENSOR_TYPE = SONY_IMX377_MIPI_12M_30FPS_12BIT
+CFLAGS += -DSNS_IMX377_12M30_12BIT_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx377_8M30_12BIT)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx377.a
+SENSOR_TYPE = SONY_IMX377_MIPI_8M_30FPS_12BIT
+CFLAGS += -DSNS_IMX377_8M30_12BIT_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+ifeq ($(SNS), imx274_8m)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx274.a
+SENSOR_TYPE = SONY_IMX274_LVDS_4K_30FPS
+CFLAGS += -DSNS_IMX274_8M_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+
+#lxc add
+ifeq ($(SNS), imx185)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx185.a
+SENSOR_TYPE = SONY_IMX185_MIPI_1080P_30FPS
+CFLAGS += -DSNS_IMX185_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+#lxc end
+
+ifeq ($(SNS), imx326_5m)
+SENSOR_LIBS += $(REL_LIB)/libsns_imx326_slave.a
+SENSOR_TYPE = SONY_IMX326_LVDS_5M_30FPS
+CFLAGS += -DSNS_IMX326_5M_SINGLE
+CFLAGS += -DHI_MIPI_ENABLE
+endif 
+#########################################################################
+#MPI_LIBS := $(REL_LIB)/libmpi.a
+#MPI_LIBS += $(REL_LIB)/libive.a
+
+#MPI_LIBS := $(REL_LIB)/libhidis.a
+MPI_LIBS := $(REL_LIB)/libmpi.a
+MPI_LIBS += $(REL_LIB)/libive.a
+MPI_LIBS += $(REL_LIB)/libmd.a
+#MPI_LIBS += $(REL_LIB)/libhidis.a
+
+COMMON_DIR:=$(PWD)/../common
+
+INC_FLAGS := -I$(COMMON_DIR)
+INC_FLAGS += -I$(REL_INC)
+INC_FLAGS += -I$(SDK_PATH)/mpp_big-little/component/acodec
+INC_FLAGS += -I$(OSAL_ROOT)/include
+
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/tw2865
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/tlv320aic31
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/sensor_spi
+INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/ak7756en
+
+ifeq ($(GYRO_TYPE), GYRO_INVENSENSE)
+	INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/gyro_invensense
+else
+	INC_FLAGS += -I$(SDK_PATH)/$(EXTDRV)/gyro_bosch
+endif
+	
+ISP_VERSION := ISP_V2
+SENSOR_LIBS += $(REL_LIB)/lib_hiae.a
+SENSOR_LIBS += $(REL_LIB)/lib_hiawb.a
+SENSOR_LIBS += $(REL_LIB)/lib_hiaf.a
+
+SENSOR_LIBS += $(REL_LIB)/lib_hidefog.a
+
+CFLAGS += -Wall -g $(INC_FLAGS) -D$(HIARCH) -DHICHIP=$(HICHIP) -DSENSOR_TYPE=$(SENSOR_TYPE) -D$(HIDBG) -D$(HI_FPGA) -lpthread -lm -ldl -D$(ISP_VERSION) -D$(GYRO_TYPE)
+
+################ select audio codec type for your sample ################
+ACODEC_TYPE ?= ACODEC_TYPE_INNER
+#external acodec
+#ACODEC_TYPE ?= ACODEC_TYPE_TLV320AIC31
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_INNER)
+	CFLAGS += -DHI_ACODEC_TYPE_INNER
+endif
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_AK7756)
+	CFLAGS += -DHI_ACODEC_TYPE_AK7756
+endif
+
+ifeq ($(ACODEC_TYPE), ACODEC_TYPE_TLV320AIC31)
+	CFLAGS += -DHI_ACODEC_TYPE_TLV320AIC31
+endif
+#########################################################################
+
+CFLAGS += $(LIBS_CFLAGS) $(MPP_CFLAGS)
+
+COMM_SRC := $(wildcard $(COMMON_DIR)/*.c)
+
+#DEL_SRC  := $(COMMON_DIR)/sample_comm_audio.c
+#COMM_SRC := $(filter-out $(DEL_SRC), $(COMM_SRC))
+
+COMM_OBJ := $(COMM_SRC:%.c=%.o)
+

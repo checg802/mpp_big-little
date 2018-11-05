@@ -1,0 +1,1 @@
+cmd_/home/pub/Hi3519v101/mpp/component/pci/pciv_fmw/hi3519v101_pciv_fmw.ko := arm-hisiv500-linux-ld -EL -r  -T ./scripts/module-common.lds --build-id  -o /home/pub/Hi3519v101/mpp/component/pci/pciv_fmw/hi3519v101_pciv_fmw.ko /home/pub/Hi3519v101/mpp/component/pci/pciv_fmw/hi3519v101_pciv_fmw.o /home/pub/Hi3519v101/mpp/component/pci/pciv_fmw/hi3519v101_pciv_fmw.mod.o
